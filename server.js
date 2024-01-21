@@ -292,5 +292,51 @@ app.delete("/api/v1/deletePayment/:id", async (req, res) => {
   }
 });
 
+//Defining a route to get all students in a particular class
+app.get("/class/:classId/students", async (req, res) => {
+  const classId = req.params.classId;
+  try {
+    const classWithStudents = await prisma.class.findUnique({
+      where: {
+        id: classId,
+      },
+      include: {
+        students: true,
+      },
+    });
+    if (!classWithStudents) {
+      return res.status(404).json({ error: "class not found" });
+    } else {
+      res.json(classWithStudents.students);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//Defining a route to get the class assigned to a specific student
+app.get("/student/:studentId/class", async (req, res) => {
+  const studentId = req.params.studentId;
+  try {
+    const studentWithClass = await prisma.students.findUnique({
+      where: {
+        id: studentId,
+      },
+      include: {
+        class: true,
+      },
+    });
+    if (!studentWithClass) {
+      return res.status(404).json({ error: "class not found" });
+    } else {
+      res.json(studentWithClass.class);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //the app or server is listening here
 app.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
