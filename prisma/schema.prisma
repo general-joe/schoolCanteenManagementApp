@@ -13,10 +13,10 @@ datasource db {
 model Admins {
   id          String   @id @default(uuid())
   fullName    String
-  PhoneNumber String
+  phoneNumber String
   email       String   @unique
   password    String
-  delflag     Boolean
+  delflag     Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -26,7 +26,7 @@ model Class {
   className        String
   classTeacherName String
   students         Students[]
-  delflag          Boolean
+  delflag          Boolean    @default(false)
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 }
@@ -40,7 +40,7 @@ model Students {
   index           Int
   parentFullName  String
   parentContact   String
-  delflag         Boolean
+  delflag         Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -55,7 +55,7 @@ model Payments {
   description String
   date        DateTime
   amountPaid  Float
-  delflag     Boolean
+  delflag     Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   Students    Students? @relation(fields: [studentsId], references: [id])
