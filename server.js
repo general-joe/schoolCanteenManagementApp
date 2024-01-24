@@ -15,7 +15,7 @@ const cors = require("cors");
 const PORT = process.env.PORT || 9093;
 
 //requiring adminRoute
-const adminRoute = require("./routes/adminRouter");
+const appRouter = require("./routes/index");
 
 //use middlewares
 
@@ -23,10 +23,13 @@ app.use(bodyParser.json());
 //using cors as a middleware
 app.use(cors({ origin: true, credentials: true }));
 //use adminRoute as a middleware
-app.use(adminRoute);
+app.use("/api", appRouter);
+app.get("/", (req, res) => {
+  res.send("Welcome to canteen app");
+});
 
 //Defining a route for getting all admins
-app.get("/api/v1/getAllAdmins", async (req, res) => {
+app.get("/getAllAdmins", async (req, res) => {
   try {
     const getAllAdmins = await prisma.admins.findMany();
     res.status(200).json({ getAllAdmins });
@@ -37,7 +40,7 @@ app.get("/api/v1/getAllAdmins", async (req, res) => {
 });
 
 //Defining route to update a single admin
-app.patch("/api/v1/updateAdmin/:id", async (req, res) => {
+app.patch("/updateAdmin/:id", async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -55,7 +58,7 @@ app.patch("/api/v1/updateAdmin/:id", async (req, res) => {
 });
 
 //Defining route to delete an admin
-app.delete("/api/v1/deleteAdmin/:id", async (req, res) => {
+app.delete("/deleteAdmin/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deleteAdmin = await prisma.admins.delete({
@@ -71,7 +74,7 @@ app.delete("/api/v1/deleteAdmin/:id", async (req, res) => {
 });
 
 //Defining a route for getting all class
-app.get("/api/v1/getAllClass", async (req, res) => {
+app.get("/getAllClass", async (req, res) => {
   try {
     const getAllClass = await prisma.class.findMany();
     res.status(200).json({ getAllClass });
@@ -82,7 +85,7 @@ app.get("/api/v1/getAllClass", async (req, res) => {
 });
 
 //Defining route to create a class
-app.post("/api/v1/registerClass", async (req, res) => {
+app.post("/registerClass", async (req, res) => {
   const { className, classTeacherName } = req.body;
   try {
     const createClass = await prisma.class.create({
@@ -99,7 +102,7 @@ app.post("/api/v1/registerClass", async (req, res) => {
 });
 
 //Defining route to update a single class
-app.patch("/api/v1/updateClass/:id", async (req, res) => {
+app.patch("/updateClass/:id", async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -117,7 +120,7 @@ app.patch("/api/v1/updateClass/:id", async (req, res) => {
 });
 
 //Defining route to delete class
-app.delete("/api/v1/deleteClass/:id", async (req, res) => {
+app.delete("/deleteClass/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deleteClass = await prisma.class.delete({
@@ -133,7 +136,7 @@ app.delete("/api/v1/deleteClass/:id", async (req, res) => {
 });
 
 //Defining a route for getting all students
-app.get("/api/v1/getAllStudents", async (req, res) => {
+app.get("/getAllStudents", async (req, res) => {
   try {
     const getAllStudents = await prisma.students.findMany();
     res.status(200).json({ getAllStudents });
@@ -144,7 +147,7 @@ app.get("/api/v1/getAllStudents", async (req, res) => {
 });
 
 //Defining route to create a student
-app.post("/api/v1/registerStudent", async (req, res) => {
+app.post("/registerStudent", async (req, res) => {
   const {
     studentFullName,
     dob,
@@ -174,7 +177,7 @@ app.post("/api/v1/registerStudent", async (req, res) => {
 });
 
 //Defining route to update a single student
-app.patch("/api/v1/updateStudent/:id", async (req, res) => {
+app.patch("/updateStudent/:id", async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -192,7 +195,7 @@ app.patch("/api/v1/updateStudent/:id", async (req, res) => {
 });
 
 //Defining route to delete student
-app.delete("/api/v1/deleteStudent/:id", async (req, res) => {
+app.delete("/deleteStudent/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deleteStudent = await prisma.students.delete({
@@ -208,7 +211,7 @@ app.delete("/api/v1/deleteStudent/:id", async (req, res) => {
 });
 
 //Defining a route for getting all students
-app.get("/api/v1/getAllStudents", async (req, res) => {
+app.get("/getAllStudents", async (req, res) => {
   try {
     const getAllStudents = await prisma.students.findMany();
     res.status(200).json({ getAllStudents });
@@ -219,7 +222,7 @@ app.get("/api/v1/getAllStudents", async (req, res) => {
 });
 
 //Defining a route for getting all payments
-app.get("/api/v1/getAllPayments", async (req, res) => {
+app.get("/getAllPayments", async (req, res) => {
   try {
     const getAllPayments = await prisma.payments.findMany();
     res.status(200).json({ getAllPayments });
@@ -230,7 +233,7 @@ app.get("/api/v1/getAllPayments", async (req, res) => {
 });
 
 //Defining route to create payment
-app.post("/api/v1/registerPayment", async (req, res) => {
+app.post("/registerPayment", async (req, res) => {
   const { description, date, amountPaid } = req.body;
   try {
     const createPayment = await prisma.payments.create({
@@ -248,7 +251,7 @@ app.post("/api/v1/registerPayment", async (req, res) => {
 });
 
 //Defining route to update a single payment
-app.patch("/api/v1/updatePayment/:id", async (req, res) => {
+app.patch("/updatePayment/:id", async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -266,7 +269,7 @@ app.patch("/api/v1/updatePayment/:id", async (req, res) => {
 });
 
 //Defining route to delete payment
-app.delete("/api/v1/deletePayment/:id", async (req, res) => {
+app.delete("/deletePayment/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deletePayment = await prisma.payments.delete({
@@ -282,7 +285,7 @@ app.delete("/api/v1/deletePayment/:id", async (req, res) => {
 });
 
 //Defining a route to get all students in a particular class
-app.get("/api/v1/class/:classId/students", async (req, res) => {
+app.get("/class/:classId/students", async (req, res) => {
   const classId = req.params.classId;
   try {
     const classWithStudents = await prisma.class.findUnique({
@@ -305,7 +308,7 @@ app.get("/api/v1/class/:classId/students", async (req, res) => {
 });
 
 //Defining a route to get the class assigned to a specific student
-app.get("/api/v1/student/:studentId/class", async (req, res) => {
+app.get("/student/:studentId/class", async (req, res) => {
   const studentId = req.params.studentId;
   try {
     const studentWithClass = await prisma.students.findUnique({
@@ -328,7 +331,7 @@ app.get("/api/v1/student/:studentId/class", async (req, res) => {
 });
 
 //Endpoint to get all payments made by a particular student
-app.get("/api/v1/student/:studentId/payments", async (req, res) => {
+app.get("/student/:studentId/payments", async (req, res) => {
   const studentId = req.params.studentId;
   try {
     const studentWithPayments = await prisma.students.findUnique({
