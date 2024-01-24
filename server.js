@@ -1,49 +1,38 @@
 //importing express
 const express = require("express");
-//importing prisma client
-const { PrismaClient } = require("@prisma/client");
+
 //importing body parser
 const bodyParser = require("body-parser");
-//creating an instance of prisma client
-const prisma = new PrismaClient();
+
 //creating an instance of express app
 //Or express initialization
 const app = express();
 //requiring dotenv here
 require("dotenv").config();
+//requiring core here
+const cors = require("cors");
 //creating the port number
 const PORT = process.env.PORT || 9093;
+
+//requiring adminRoute
+const adminRoute = require("./routes/adminRouter");
 
 //use middlewares
 
 app.use(bodyParser.json());
+//using cors as a middleware
+app.use(cors({ origin: true, credentials: true }));
+//use adminRoute as a middleware
+app.use(adminRoute);
 
 //Defining a route for getting all admins
-app.get("/", async (req, res) => {
+app.get("/api/v1/getAllAdmins", async (req, res) => {
   try {
     const getAllAdmins = await prisma.admins.findMany();
     res.status(200).json({ getAllAdmins });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
-  }
-});
-//Defining route to create an admin
-app.post("/api/v1/registerAdmin", async (req, res) => {
-  const { fullName, phoneNumber, email, password } = req.body;
-  try {
-    const createAdmin = await prisma.admins.create({
-      data: {
-        fullName,
-        phoneNumber,
-        email,
-        password,
-      },
-    });
-    res.status(200).json({ createAdmin });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Error !!!" });
   }
 });
 
@@ -293,7 +282,7 @@ app.delete("/api/v1/deletePayment/:id", async (req, res) => {
 });
 
 //Defining a route to get all students in a particular class
-app.get("/class/:classId/students", async (req, res) => {
+app.get("/api/v1/class/:classId/students", async (req, res) => {
   const classId = req.params.classId;
   try {
     const classWithStudents = await prisma.class.findUnique({
@@ -316,7 +305,7 @@ app.get("/class/:classId/students", async (req, res) => {
 });
 
 //Defining a route to get the class assigned to a specific student
-app.get("/student/:studentId/class", async (req, res) => {
+app.get("/api/v1/student/:studentId/class", async (req, res) => {
   const studentId = req.params.studentId;
   try {
     const studentWithClass = await prisma.students.findUnique({
@@ -335,6 +324,27 @@ app.get("/student/:studentId/class", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//Endpoint to get all payments made by a particular student
+app.get("/api/v1/student/:studentId/payments", async (req, res) => {
+  const studentId = req.params.studentId;
+  try {
+    const studentWithPayments = await prisma.students.findUnique({
+      where: { id: studentId },
+      include: {
+        payments: true,
+      },
+    });
+    if (!studentWithPayments) {
+      return res.status(404).json({ error: "student not found" });
+    } else {
+      res.json(studentWithPayments.payments);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
