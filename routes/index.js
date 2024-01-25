@@ -4,8 +4,10 @@ const appRouter = Router();
 //import all the routes here
 
 const adminRoute = require("./adminRouter");
+const classRoute = require("./classRouter");
 
-//middleware
+//all middlewares here
 appRouter.use("/admin", adminRoute);
+appRouter.use("/class", classRoute);
 
 module.exports = appRouter;

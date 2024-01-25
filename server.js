@@ -24,100 +24,16 @@ app.use(bodyParser.json());
 app.use(cors({ origin: true, credentials: true }));
 //use adminRoute as a middleware
 app.use("/api", appRouter);
+
 app.get("/", (req, res) => {
   res.send("Welcome to canteen app");
 });
 
-//Defining a route for getting all admins
-app.get("/getAllAdmins", async (req, res) => {
-  try {
-    const getAllAdmins = await prisma.admins.findMany();
-    res.status(200).json({ getAllAdmins });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
 
-//Defining route to update a single admin
-app.patch("/updateAdmin/:id", async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-  try {
-    const updateAdmin = await prisma.admins.update({
-      where: {
-        id,
-      },
-      data,
-    });
-    res.status(200).json({ updateAdmin });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
 
-//Defining route to delete an admin
-app.delete("/deleteAdmin/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deleteAdmin = await prisma.admins.delete({
-      where: {
-        id,
-      },
-    });
-    res.status(200).json({ deleteAdmin });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error !!1" });
-  }
-});
 
-//Defining a route for getting all class
-app.get("/getAllClass", async (req, res) => {
-  try {
-    const getAllClass = await prisma.class.findMany();
-    res.status(200).json({ getAllClass });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
 
-//Defining route to create a class
-app.post("/registerClass", async (req, res) => {
-  const { className, classTeacherName } = req.body;
-  try {
-    const createClass = await prisma.class.create({
-      data: {
-        className,
-        classTeacherName,
-      },
-    });
-    res.status(200).json({ createClass });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Error !!!" });
-  }
-});
 
-//Defining route to update a single class
-app.patch("/updateClass/:id", async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-  try {
-    const updateClass = await prisma.class.update({
-      where: {
-        id,
-      },
-      data,
-    });
-    res.status(200).json({ updateClass });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
 
 //Defining route to delete class
 app.delete("/deleteClass/:id", async (req, res) => {
