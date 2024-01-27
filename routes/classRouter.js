@@ -6,5 +6,6 @@ const classController = require("../controllers/classController");
 router.post("/registerClass", classController.registerClass);
 router.get("/getAllClass", classController.getAllClass);
 router.patch("/updateClass/:id", classController.updateClassById);
+router.delete("/deleteClass/:id", classController.deleteClassById);
 
 module.exports = router;

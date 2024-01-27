@@ -46,8 +46,26 @@ const getAllClass = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+//Defining function to delete a class by it's Id
+
+const deleteClassById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleteClass = await prisma.class.delete({
+      where: {
+        id,
+      },
+    });
+    res.status(200).json({ deleteClass });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error !!1" });
+  }
+};
 module.exports = {
   registerClass,
   updateClassById,
   getAllClass,
+  deleteClassById,
 };
