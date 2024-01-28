@@ -1,27 +1,15 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const moment = require("moment");
 
 //Defining function to register a stuent
 const signUpStuent = async (req, res) => {
-  const {
-    studentFullName,
-    dob,
-    age,
-    gender,
-    index,
-    parentFullName,
-    parentContact,
-  } = req.body;
+  const { dob, ...rest } = req.body;
   try {
     const createStudet = await prisma.students.create({
       data: {
-        studentFullName,
-        dob,
-        age,
-        gender,
-        index,
-        parentFullName,
-        parentContact,
+        dob: moment().format(),
+        ...rest,
       },
     });
     res.status(200).json({ createStudet });
@@ -76,9 +64,33 @@ const deleteStudentById = async (req, res) => {
   }
 };
 
+//Defining function to get all students in a particular class by selecting the classId
+const getAllStudentByClassId = async (req, res) => {
+  const classId = req.params.classId;
+  try {
+    const classWithStudents = await prisma.class.findUnique({
+      where: {
+        id: classId,
+      },
+      include: {
+        students: true,
+      },
+    });
+    if (!classWithStudents) {
+      return res.status(404).json({ error: "class not found" });
+    } else {
+      res.json(classWithStudents.students);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   signUpStuent,
   getAllStudents,
   updatStudentById,
   deleteStudentById,
+  getAllStudentByClassId,
 };

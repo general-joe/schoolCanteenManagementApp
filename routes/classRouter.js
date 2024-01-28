@@ -7,5 +7,9 @@ router.post("/registerClass", classController.registerClass);
 router.get("/getAllClass", classController.getAllClass);
 router.patch("/updateClass/:id", classController.updateClassById);
 router.delete("/deleteClass/:id", classController.deleteClassById);
+router.get(
+  "/:studentId/class",
+  classController.getClassForSpecificStudentByStudentId
+);
 
 module.exports = router;
