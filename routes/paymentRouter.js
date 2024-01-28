@@ -11,5 +11,6 @@ router.get(
   "/:studentId/payments",
   paymentController.getAllPaymentsMadeByParticularStudent
 );
+router.get("/all-payments/:date/day", paymentController.getAllPaymentsByDate);
 
 module.exports = router;

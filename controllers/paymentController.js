@@ -81,13 +81,37 @@ const getAllPaymentsMadeByParticularStudent = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+//Defining function to get all payment by inputing date for day transaction
+const getAllPaymentsByDate = async (req, res) => {
+  try {
+    const date = moment(req.params.date);
+    const getAllPaymentDay = await prisma.payments.findMany({
+      where: {
+        //filtering system to find records in a day
+        createdAt: {
+          //greater than the start of the day
+          gte: date.startOf("day").toDate(),
+          ///lesser than the end of the day
+          lt: date.endOf("day").toDate(),
+        },
+      },
+    });
+    res.status(200).json({ getAllPaymentDay });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 module.exports = {
   makePayment,
   getAllPayments,
   updatePaymentById,
   deletePaymentById,
   getAllPaymentsMadeByParticularStudent,
+  getAllPaymentsByDate,
 };
