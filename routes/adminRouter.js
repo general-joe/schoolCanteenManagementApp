@@ -7,5 +7,6 @@ router.post("/registerAdmin", adminController.signUpAdmin);
 router.get("/getAllAdmins", adminController.getAllAdmins);
 router.patch("/updateAdmin/:id", adminController.updateAdminById);
 router.delete("/deleteAdmin/:id", adminController.deleteAdminById);
+router.post("/login", adminController.loginAdmin);
 
 module.exports = router;

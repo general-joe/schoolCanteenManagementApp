@@ -5,9 +5,21 @@ const jwt = require("jsonwebtoken");
 
 //Defining function to create admin
 const signUpAdmin = async (req, res) => {
-  const { fullName, phoneNumber, email, password } = req.body;
+  let { fullName, phoneNumber, email, password } = req.body;
   try {
-    const createAdmin = await prisma.admins.create({
+    //implementing logic to check whether the admins details already exist in the database
+    const existingAdmin = await prisma.admins.findFirst({
+      where: { email: email },
+    });
+    if (existingAdmin) {
+      return res.status(409).json({ message: "Admin has already registered" });
+    } else {
+      //implementing logic to hash the password before storing it into the database
+      const passwordHashed = await bcrypt.hash(password, 10);
+      password = passwordHashed;
+    }
+    //implementing logic to create admin
+    const createNewAdmin = await prisma.admins.create({
       data: {
         fullName,
         phoneNumber,
@@ -15,10 +27,13 @@ const signUpAdmin = async (req, res) => {
         password,
       },
     });
-    res.status(200).json({ createAdmin });
+    res.status(200).json({
+      message: "You have successfully sign up to this page",
+      admin: createNewAdmin,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Error !!!" });
+    res.status(500).json({ message: "Internal Server Error !!!" });
   }
 };
 
@@ -66,9 +81,29 @@ const deleteAdminById = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error !!1" });
   }
 };
+
+//admin authentication endpoint(admin's login logic)
+const loginAdmin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const admins = await prisma.admins.findUnique({
+      where: { email },
+    });
+    if (!admins || !(await bcrypt.compare(password, admins.password))) {
+      res.status(401).json({ message: "Invalid credentials" });
+    } else {
+      const token = jwt.sign({ userId: admins.id }, process.env.SECRET_KEY);
+      res.json({ token, admins });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   signUpAdmin,
   getAllAdmins,
   updateAdminById,
   deleteAdminById,
+  loginAdmin,
 };

@@ -51,13 +51,14 @@ model Students {
 }
 
 model Payments {
-  id          String    @id @default(uuid())
-  description String
-  date        DateTime
-  amountPaid  Float
-  delflag     Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  Students    Students? @relation(fields: [studentsId], references: [id])
-  studentsId  String?
+  id              String    @id @default(uuid())
+  studentFullName String
+  description     String
+  date            DateTime
+  amountPaid      Float
+  delflag         Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  Students        Students? @relation(fields: [studentsId], references: [id])
+  studentsId      String?
 }

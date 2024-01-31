@@ -31,20 +31,5 @@ app.get("/", (req, res) => {
   res.send("Welcome to canteen app");
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //the app or server is listening here
 app.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
