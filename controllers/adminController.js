@@ -89,7 +89,11 @@ const loginAdmin = async (req, res) => {
     const admins = await prisma.admins.findUnique({
       where: { email },
     });
-    if (!admins || !(await bcrypt.compare(password, admins.password))) {
+
+    const bcryptCheck = await bcrypt.compare(password, admins.password);
+    if (!admins) {
+      res.status(404).json({ message: "Admins not found" });
+    } else if (!bcryptCheck) {
       res.status(401).json({ message: "Invalid credentials" });
     } else {
       const token = jwt.sign({ userId: admins.id }, process.env.SECRET_KEY);
