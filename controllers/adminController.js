@@ -87,7 +87,7 @@ const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const admins = await prisma.admins.findUnique({
-      where: { email },
+      where: { email, password },
     });
 
     const bcryptCheck = await bcrypt.compare(password, admins.password);
