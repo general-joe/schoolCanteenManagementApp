@@ -5,32 +5,33 @@ const jwt = require("jsonwebtoken");
 
 //Defining function to create admin
 const signUpAdmin = async (req, res) => {
-  let { fullName, phoneNumber, email, password } = req.body;
+  const { fullName, phoneNumber, email, password } = req.body;
   try {
     //implementing logic to check whether the admins details already exist in the database
     const existingAdmin = await prisma.admins.findFirst({
       where: { email: email },
     });
     if (existingAdmin) {
-      return res.status(409).json({ message: "Admin has already registered" });
-    } else {
-      //implementing logic to hash the password before storing it into the database
-      const passwordHashed = await bcrypt.hash(password, 10);
-      password = passwordHashed;
+      res.status(409).json({ message: "Admin has already registered" });
     }
-    //implementing logic to create admin
-    const createNewAdmin = await prisma.admins.create({
-      data: {
-        fullName,
-        phoneNumber,
-        email,
+    //implementing logic to hash the password before storing it into the database
+    const passwordHashed = await bcrypt.hash(password, 10);
+    if (passwordHashed) {
+      //implementing logic to create admin
+      const createNewAdmin = await prisma.admins.create({
+        data: {
+          fullName,
+          phoneNumber,
+          email,
+          password:passwordHashed
+        },
+      });
+      res.status(200).json({
+        message: "You have successfully sign up to this page",
+        admin: createNewAdmin,
         password,
-      },
-    });
-    res.status(200).json({
-      message: "You have successfully sign up to this page",
-      admin: createNewAdmin,
-    });
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error !!!" });
@@ -86,18 +87,22 @@ const deleteAdminById = async (req, res) => {
 const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const admins = await prisma.admins.findUnique({
-      where: { email, password },
+    const admins = await prisma.admins.findFirst({
+      where: { email },
     });
 
-    const bcryptCheck = await bcrypt.compare(password, admins.password);
     if (!admins) {
-      res.status(404).json({ message: "Admins not found" });
-    } else if (!bcryptCheck) {
-      res.status(401).json({ message: "Invalid credentials" });
+      res.status(404).json({ message: "Admins not found", admins });
+    }
+    const bcryptCheck = await bcrypt.compare(admins.password, password);
+    if (bcryptCheck) {
+      res
+        .status(401)
+        .json({ message: "Invalide credentials" });
     } else {
       const token = jwt.sign({ userId: admins.id }, process.env.SECRET_KEY);
-      res.json({ token, admins });
+      const {password,...admin}= admins
+      res.json({ token, admin });
     }
   } catch (error) {
     console.error(error);
