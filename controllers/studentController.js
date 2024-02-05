@@ -5,17 +5,27 @@ const moment = require("moment");
 //Defining function to register a stuent
 const signUpStuent = async (req, res) => {
   const { dob, ...rest } = req.body;
+
   try {
-    const createStudet = await prisma.students.create({
-      data: {
-        dob: moment(dob).format(),
-        ...rest,
-      },
-      include: {
-        Class: true,
-      },
+    //  //implementing logic to check whether the student's details already exist in the database
+    const existingStudent = await prisma.students.findFirst({
+      where: { index: rest.index },
     });
-    res.status(200).json({ createStudet });
+    if (existingStudent) {
+      res.status(409).json({ message: "Student has already registered" });
+    } else {
+      //implementing logic to create student
+      const createStudet = await prisma.students.create({
+        data: {
+          dob: moment(dob).format(),
+          ...rest,
+        },
+        include: {
+          Class: true,
+        },
+      });
+      res.status(200).json({ createStudet });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Error !!!" });
