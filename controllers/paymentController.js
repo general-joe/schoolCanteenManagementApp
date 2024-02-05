@@ -8,7 +8,7 @@ const makePayment = async (req, res) => {
   try {
     const createPayment = await prisma.payments.create({
       data: {
-        date: moment().format(),
+        date: moment(date).format(),
         ...rest,
       },
     });
