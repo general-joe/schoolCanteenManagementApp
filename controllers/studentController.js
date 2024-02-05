@@ -8,8 +8,11 @@ const signUpStuent = async (req, res) => {
   try {
     const createStudet = await prisma.students.create({
       data: {
-        dob: moment().format(),
+        dob: moment(dob).format(),
         ...rest,
+      },
+      include: {
+        Class: true,
       },
     });
     res.status(200).json({ createStudet });
