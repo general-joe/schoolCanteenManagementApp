@@ -2,37 +2,31 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const moment = require("moment");
 
-//Defining function to register a stuent
-const signUpStuent = async (req, res) => {
-  const { dob, ...rest } = req.body;
-  // Convert index to integer
-  const indexAsInt = parseInt(rest.index, 10);
+//Defining function to register a student
+const signUpStudent = async (req, res, next) => {
+  const data = req.body;
+ 
 
   try {
     //  //implementing logic to check whether the student's details already exist in the database
-    const existingStudent = await prisma.students.findFirst({
-      where: { index: indexAsInt },
+    const existingStudent = await prisma.students.findMany({
+      where: {indexNumber: studentid},
     });
     if (existingStudent) {
-      res.status(409).json({ message: "Student has already registered" });
+      res.status(400).json({ message: "Student has already registered" });
     } else {
       //implementing logic to create student
-      const createStudet = await prisma.students.create({
-        data: {
-          dob: moment(dob).format(),
-          ...rest,
-        },
-        include: {
-          Class: true,
-        },
-      });
-      res.status(200).json({ createStudet });
+      const student = await prisma.Students.create({
+        data
+      })
+          
+      res.status(200).json({ message: "Student created Successfully", student});
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Error !!!" });
+    console.log(error);
+    
   }
-};
+});
 
 //Defining function to get all registered students
 const getAllStudents = async (req, res) => {
