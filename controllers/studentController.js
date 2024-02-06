@@ -5,11 +5,13 @@ const moment = require("moment");
 //Defining function to register a stuent
 const signUpStuent = async (req, res) => {
   const { dob, ...rest } = req.body;
+  // Convert index to integer
+  const indexAsInt = parseInt(rest.index, 10);
 
   try {
     //  //implementing logic to check whether the student's details already exist in the database
     const existingStudent = await prisma.students.findFirst({
-      where: { index: rest.index },
+      where: { index: indexAsInt },
     });
     if (existingStudent) {
       res.status(409).json({ message: "Student has already registered" });
