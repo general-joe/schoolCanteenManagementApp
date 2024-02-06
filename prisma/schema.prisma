@@ -31,8 +31,8 @@ model Class {
   updatedAt        DateTime   @updatedAt
 }
 
-model Students {
-  id              String   @id @default(uuid())
+model students {
+  indexNumber              String   @id
   studentFullName String
   dob             DateTime
   age             Int
