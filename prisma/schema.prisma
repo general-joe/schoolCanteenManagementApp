@@ -37,7 +37,6 @@ model student {
   dob             DateTime
   age             Int
   gender          String
-  index           String   @unique
   parentFullName  String
   parentContact   String
   delflag         Boolean  @default(false)

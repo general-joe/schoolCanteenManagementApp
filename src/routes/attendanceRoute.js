@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const attendance = require('../controllers/attendance');
-const {checkindexAvailablity} = require('../validations/middlewares/attendanceCheck')
+const {checkindexAvailablity} = require("../validation/middlewares/attendanceCheck")
 
 
 

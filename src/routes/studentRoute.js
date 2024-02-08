@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../controllers/student')
-const {studentAvailablity} = require('../validations/middlewares/studentAvailability')
+const {studentAvailablity} = require("../validation/middlewares/studentAvailability")
 
 
 
