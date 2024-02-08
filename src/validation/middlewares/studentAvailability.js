@@ -25,6 +25,6 @@ const studentAvailablity = async (req,res,next)=>{
     
 };
 
-module.exports={
+module.exports= {
     studentAvailablity
 }
