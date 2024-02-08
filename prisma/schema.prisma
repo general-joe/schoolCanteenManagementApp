@@ -22,17 +22,17 @@ model Admins {
 }
 
 model Class {
-  id               String     @id @default(uuid())
+  id               String    @id @default(uuid())
   className        String
   classTeacherName String
-  students         Students[]
-  delflag          Boolean    @default(false)
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  student          student[]
+  delflag          Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
-model students {
-  indexNumber              String   @id
+model student {
+  indexNumber     String   @id
   studentFullName String
   dob             DateTime
   age             Int
@@ -44,21 +44,36 @@ model students {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  Class   Class?  @relation(fields: [classId], references: [id])
-  classId String?
+  Class   Class?  @relation(fields: [classid], references: [id])
+  classid String?
 
-  payments Payments[]
+  payments   payment[]
+  attendance attendance[]
 }
 
-model Payments {
-  id              String    @id @default(uuid())
+model payment {
+  id              String   @id @default(uuid())
   studentFullName String
   description     String
   date            DateTime
   amountPaid      Float
-  delflag         Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  Students        Students? @relation(fields: [studentsId], references: [id])
-  studentsId      String?
+  delflag         Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  Student         student? @relation(fields: [studentid], references: [indexNumber])
+  studentid       String?
+}
+
+model attendance {
+  id               String   @id @default(uuid())
+  attendanceStatus status
+  Date             DateTime
+  updatedAt        DateTime @updatedAt
+  student          student?  @relation(fields: [studentid], references: [indexNumber])
+  studentid        String?
+}
+
+enum status {
+  present
+  absent
 }
