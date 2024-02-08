@@ -4,6 +4,7 @@ const prisma = require('../utils/prismaUtils')
 const addStudent = async (req, res, next) => {
     try {
         let data = req.body;
+        data.dob = moment().toDate();
 
 
         const student = await prisma.student.create({
