@@ -1,35 +1,28 @@
-//importing express
-const express = require("express");
-
-//importing body parser
-const bodyParser = require("body-parser");
-
-//creating an instance of express app
-//Or express initialization
+const express = require('express');
 const app = express();
-//requiring dotenv here
-require("dotenv").config();
-//requiring core here
-const cors = require("cors");
-//requiring moment here
-const moment = require("moment");
-//creating the port number
-const PORT = process.env.PORT || 9093;
+const dotenv = require('dotenv')
+dotenv.config()
 
-//requiring adminRoute
-const appRouter = require("./routes/index");
+//const {logger} = require('./src/utils/logger')
 
-//use middlewares
+const port = process.env.PORT || 4000;
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const indexRoute = require('./src/routes/index');
 
-app.use(bodyParser.json());
-//using cors as a middleware
-app.use(cors({ origin: true, credentials: true }));
-//use adminRoute as a middleware
-app.use("/api", appRouter);
 
-app.get("/", (req, res) => {
-  res.send("Welcome to canteen app");
-});
 
-//the app or server is listening here
-app.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
+app.use(morgan('combined'))
+app.use(bodyParser.json())
+
+
+app.use('/api', indexRoute)
+
+
+
+
+app.listen(port, ()=>{
+    
+    
+    console.log('listening on port', `${port}`)
+})
