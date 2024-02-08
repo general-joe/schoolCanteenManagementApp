@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const paymentController = require("../controllers/paymentController");
+const paymentController = require("../controllers/payment");
 
 //Defining all routes for crud operations for payment model
 router.post("/registerPayment", paymentController.makePayment);
