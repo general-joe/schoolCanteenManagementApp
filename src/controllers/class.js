@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../utils/prismaUtils');
 
 //Defining function to register class
 const registerClass = async (req, res) => {
