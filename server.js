@@ -8,7 +8,8 @@ dotenv.config()
 const port = process.env.PORT || 4000;
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const indexRoute = require('./src/routes/index');
+
+const indexRoute = require("./src/routes/index")
 
 
 

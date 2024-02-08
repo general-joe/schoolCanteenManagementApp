@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const adminController = require("../controllers/adminController");
-const validationError = require("../utilities/validationError");
-const validationScheme = require("../utilities/validationScheme");
+const adminController = require("../controllers/admin");
+const validationError = require("../utils/validationError");
+const validationScheme = require("../validation/validationScheme");
 const valid = [...validationScheme, validationError.validateRequestSchema];
 
 //Defining all routes for the various crud operations for the admin model
