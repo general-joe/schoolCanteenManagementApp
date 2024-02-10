@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const paymentController = require("../controllers/paymentController");
+const payment = require("../controllers/payment")
 
 //Defining all routes for crud operations for payment model
-router.post("/registerPayment", paymentController.makePayment);
-router.get("/getAllPayments", paymentController.getAllPayments);
-router.patch("/updatePayment/:id", paymentController.updatePaymentById);
-router.delete("/deletePayment/:id", paymentController.deletePaymentById);
+router.post("/pay", payment.makePayment);
+router.get("/paymentreceipts", payment.getAllPayments);
+router.patch("/updatePayment/:id", payment.updatePaymentById);
+router.delete("/deletePayment/:id", payment.deletePaymentById);
 router.get(
-  "/:studentId/payments",
-  paymentController.getAllPaymentsMadeByParticularStudent
+  "/studentid:",
+  payment.getPaymentBystudentId
 );
-router.get("/all-payments/:date/day", paymentController.getAllPaymentsByDate);
+router.get("/date", payment.getPaymentByDate);
 
 module.exports = router;

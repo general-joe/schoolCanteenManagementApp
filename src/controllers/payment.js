@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../utils/prismaUtils')
 const moment = require("moment");
 
 //Defining function to make/register/signUp Payment model
@@ -65,42 +64,43 @@ const deletePaymentById = async (req, res) => {
 };
 
 //Defining function to get all payments made by a particular student
-const getAllPaymentsMadeByParticularStudent = async (req, res) => {
-  const studentId = req.params.studentId;
+const getPaymentBystudentId = async (req, res) => {
+  const {studentid} = req.body
   try {
-    const studentWithPayments = await prisma.students.findUnique({
-      where: { id: studentId },
-      include: {
-        payments: true,
-      },
+    const student = await prisma.student.findUnique({
+      where: { indexNumber: studentid },
+
     });
-    if (!studentWithPayments) {
-      return res.status(404).json({ error: "student not found" });
-    } else {
-      res.json(studentWithPayments.payments);
+    if(student){
+      const payment = await prisma.payment.findMany({
+        where: {studentid}
+      })
+      res.status(200).json({message:"payment for student with student id "+ studentid, payment});
+    }
+    else{
+      res.status(404).json({message:"No payment found with student id "+ studentid});
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    
   }
 };
 
 //Defining function to get all payment by inputing date for day transaction
-const getAllPaymentsByDate = async (req, res) => {
+const getPaymentByDate = async (req, res) => {
   try {
-    const date = moment(req.params.date);
-    const getAllPaymentDay = await prisma.payments.findMany({
+    const {date} = req.body
+    const getPaymentByDate = await prisma.payment.findMany({
       where: {
-        //filtering system to find records in a day
-        createdAt: {
-          //greater than the start of the day
-          gte: date.startOf("day").toDate(),
-          ///lesser than the end of the day
-          lt: date.endOf("day").toDate(),
-        },
-      },
+       date
+      }
     });
-    res.status(200).json({ getAllPaymentDay });
+    if(!date){
+      res.status(404).json({message:"No payment date found for ", date});
+    }else{
+      res.status(200).json({ message: "payment for ", getPaymentByDate });
+    }
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -112,6 +112,6 @@ module.exports = {
   getAllPayments,
   updatePaymentById,
   deletePaymentById,
-  getAllPaymentsMadeByParticularStudent,
-  getAllPaymentsByDate,
+  getPaymentBystudentId,
+  getPaymentByDate
 };

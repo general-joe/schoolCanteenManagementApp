@@ -1,15 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const classController = require("../controllers/classController");
+const express = require('express')
 
-//Defining all routes for the various crud operations for the class model
-router.post("/registerClass", classController.registerClass);
-router.get("/getAllClass", classController.getAllClass);
-router.patch("/updateClass/:id", classController.updateClassById);
-router.delete("/deleteClass/:id", classController.deleteClassById);
-router.get(
-  "/:studentId/class",
-  classController.getClassForSpecificStudentByStudentId
-);
+const router = express.Router()
+const Class = require("../controllers/class")
+
+router.post ('/addClass', Class.addClass)
+router.get('/getClass', Class.getClass)
+router.get('/id:', Class.getClassByStudentid)
 
 module.exports = router;
