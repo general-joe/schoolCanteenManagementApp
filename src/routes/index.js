@@ -1,17 +1,14 @@
-const { Router } = require("express");
-const appRouter = Router();
+const { Router } = require('express');
 
-//import all the routes here
+const route = Router();
+const studentRoute = require('../routes/studentRoute')
+const attendanceRoute = require('../routes/attendanceRoute')
+const classRoute = require('../routes/classRoute')
+const paymentRoute = require('../routes/paymentRoute')
 
-const adminRoute = require("./adminRouter");
-const classRoute = require("./classRouter");
-const studentRoute = require("./studentRouter");
-const paymentRoute = require("./paymentRouter");
+route.use('/student',studentRoute)
+route.use('/attendance', attendanceRoute)
+route.use('/class', classRoute)
+route.use('/payment', paymentRoute)
 
-//Using it as a  middlewares here
-appRouter.use("/admin", adminRoute);
-appRouter.use("/class", classRoute);
-appRouter.use("/student", studentRoute);
-appRouter.use("/payment", paymentRoute);
-
-module.exports = appRouter;
+module.exports = route;
