@@ -3,29 +3,27 @@ const moment = require("moment");
 
 //Defining function to make/register/signUp Payment model
 const makePayment = async (req, res) => {
-  const { date, ...rest } = req.body;
+  const { Date, ...rest } = req.body;
   try {
-    const createPayment = await prisma.payments.create({
+    const createPayment = await prisma.payment.create({
       data: {
-        date: moment(date).format(),
+        Date: moment(Date).format(),
         ...rest,
       },
     });
-    res.status(200).json({ createPayment });
+    res.status(200).json({ message: "payment made successfully", createPayment });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Error !!!" });
   }
 };
 
 //Defining function to get all payments
 const getAllPayments = async (req, res) => {
   try {
-    const getAllPayments = await prisma.payments.findMany();
+    const getAllPayments = await prisma.payment.findMany();
     res.status(200).json({ getAllPayments });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -34,7 +32,7 @@ const updatePaymentById = async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
-    const updatePayment = await prisma.payments.update({
+    const updatePayment = await prisma.payment.update({
       where: {
         id,
       },
@@ -43,7 +41,7 @@ const updatePaymentById = async (req, res) => {
     res.status(200).json({ updatePayment });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+
   }
 };
 
@@ -51,7 +49,7 @@ const updatePaymentById = async (req, res) => {
 const deletePaymentById = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletePayment = await prisma.payments.delete({
+    const deletePayment = await prisma.payment.delete({
       where: {
         id,
       },
@@ -59,7 +57,7 @@ const deletePaymentById = async (req, res) => {
     res.status(200).json({ deletePayment });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error !!1" });
+   
   }
 };
 
@@ -103,7 +101,7 @@ const getPaymentByDate = async (req, res) => {
     
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+   
   }
 };
 
