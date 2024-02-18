@@ -14,7 +14,7 @@ const addFood = async (req, res) => {
 };
 
 ///Getting all foods
-const getFoods = async (req, res, next) => {
+const getFood = async (req, res, next) => {
   try {
     const Food = await prisma.food.findMany({});
     res.status(200).json({ message: "Foods", Food });
@@ -60,7 +60,7 @@ const deleteFood = async (req, res, next) => {
 //export all the functions here
 module.exports = {
   addFood,
-  getFoods,
+  getFoodn,
   updateFood,
   deleteFood,
 };
