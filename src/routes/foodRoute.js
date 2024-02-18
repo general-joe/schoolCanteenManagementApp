@@ -4,7 +4,7 @@ const Food = require("../controllers/food");
 
 //Defining all routes for the various crud operations for the food model
 router.post("/addFood", Food.addFood);
-router.get("/getFoods", Food.getFoods);
+router.get("/getFoods", Food.getFood);
 router.patch("/:id", Food.updateFood);
 router.delete("/:id", Food.deleteFood);
 
