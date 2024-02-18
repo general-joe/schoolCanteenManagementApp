@@ -7,6 +7,7 @@ router.post("/addFood", Food.addFood);
 router.get("/getFoods", Food.getFoods);
 router.patch("/:id", Food.updateFood);
 router.delete("/:id", Food.deleteFood);
+router.get("/:id", Food.getFoodById);
 
 //exporting our router here
 module.exports = router;

@@ -42,7 +42,6 @@ const updateFood = async (req, res) => {
   }
 };
 
-
 //delete food by foodId
 const deleteFood = async (req, res, next) => {
   const { id } = req.params;
@@ -57,10 +56,26 @@ const deleteFood = async (req, res, next) => {
     logger.error(error);
   }
 };
+
+//function to get food  by foodId
+const getFoodById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const getFoodById = await prisma.food.findUnique({
+      where: {
+        id,
+      },
+    });
+    res.status(200).json({ message: "Food ", getFoodById });
+  } catch (error) {
+    logger.error(error);
+  }
+};
 //export all the functions here
 module.exports = {
   addFood,
   getFoods,
   updateFood,
   deleteFood,
+  getFoodById,
 };
