@@ -1,5 +1,4 @@
 const { Router } = require('express');
-
 const route = Router();
 const studentRoute = require('../routes/studentRoute')
 const attendanceRoute = require('../routes/attendanceRoute')

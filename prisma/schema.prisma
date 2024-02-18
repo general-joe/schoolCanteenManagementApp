@@ -10,8 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model admin {
   id          String   @id @default(uuid())
   fullName    String
@@ -53,16 +51,21 @@ model student {
 }
 
 model payment {
-  id              String   @id @default(uuid())
-  studentFullName String
-  description     String
-  Date            DateTime
-  amountPaid      Float
-  delflag         Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  Student         student? @relation(fields: [studentid], references: [indexNumber])
-  studentid       String?
+  id                     String   @id @default(uuid())
+  studentFullName        String
+  description            String
+  Date                   DateTime
+  amountPaid             Float
+  isPaid                 Boolean
+  initialAmountCollected Float
+  totalAmountCollected   Float
+  food                   food?    @relation(fields: [foodId], references: [id])
+  delflag                Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  Student                student? @relation(fields: [studentid], references: [indexNumber])
+  studentid              String?
+  foodId                 String?
 }
 
 model attendance {
@@ -70,8 +73,19 @@ model attendance {
   attendanceStatus status
   Date             DateTime
   updatedAt        DateTime @updatedAt
-  student          student?  @relation(fields: [studentid], references: [indexNumber])
+  student          student? @relation(fields: [studentid], references: [indexNumber])
   studentid        String?
+}
+
+model food {
+  id        String   @id @default(uuid())
+  menu      String
+  day       DateTime
+  delflag   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payment payment[]
 }
 
 enum status {

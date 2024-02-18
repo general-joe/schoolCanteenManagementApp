@@ -1,6 +1,6 @@
 
 const prisma = require('../../utils/prismaUtils')
-const logger = require('../../utils/logger')
+const logger = require("../../utils/logger")
 
 const classAvailablity = async (req,res,next)=>{
     try{
