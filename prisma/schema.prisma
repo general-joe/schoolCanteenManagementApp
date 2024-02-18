@@ -57,7 +57,6 @@ model payment {
   Date                   DateTime
   amountPaid             Float
   isPaid                 Boolean
-  initialAmountCollected Float
   totalAmountCollected   Float
   food                   food?    @relation(fields: [foodId], references: [id])
   delflag                Boolean  @default(false)
