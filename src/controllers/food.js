@@ -1,6 +1,6 @@
 //importing prisma module
 const prisma = require("../utils/prismaUtils");
-
+const logger = require('../utils/logger')
 //Adding a new food
 
 const addFood = async (req, res) => {
@@ -10,6 +10,7 @@ const addFood = async (req, res) => {
     res.status(200).json({ message: "Food created", Food });
   } catch (error) {
     console.error(error);
+    logger.error(error)
   }
 };
 
