@@ -79,7 +79,7 @@ model attendance {
 model food {
   id        String   @id @default(uuid())
   menu      String
-  day       DateTime
+  day       String
   delflag   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

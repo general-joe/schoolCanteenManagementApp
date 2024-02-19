@@ -1,6 +1,7 @@
 //importing prisma module
 const prisma = require("../utils/prismaUtils");
-const logger = require('../utils/logger')
+const logger = require("../utils/logger");
+
 //Adding a new food
 
 const addFood = async (req, res) => {
@@ -9,8 +10,8 @@ const addFood = async (req, res) => {
     const Food = await prisma.food.create({ data });
     res.status(200).json({ message: "Food created", Food });
   } catch (error) {
-    console.error(error);
-    logger.error(error)
+    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -27,7 +28,7 @@ const getFood = async (req, res, next) => {
 //update food by foodId
 const updateFood = async (req, res) => {
   try {
-    const id = req.params;
+    const { id } = req.params;
     const data = req.body;
     const updateFood = await prisma.food.update({
       where: {
