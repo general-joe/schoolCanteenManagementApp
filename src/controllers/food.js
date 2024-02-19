@@ -74,7 +74,7 @@ const getFoodById = async (req, res, next) => {
 //export all the functions here
 module.exports = {
   addFood,
-  getFoodn,
+  getFood,
   updateFood,
   deleteFood,
   getFoodById,
