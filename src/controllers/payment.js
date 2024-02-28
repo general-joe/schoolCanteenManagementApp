@@ -1,30 +1,20 @@
-const prisma = require('../utils/prismaUtils')
+//requiring prisma module and moment module here
+const prisma = require("../utils/prismaUtils");
 const moment = require("moment");
 
 //Defining function to make/register/signUp Payment model
 const makePayment = async (req, res) => {
-  
+  const { Date, ...rest } = req.body;
   try {
-    const { Date, ...rest} = req.body;
-    if(amountPaid === 10.0){
-      const createPayment = await prisma.payment.create({
-        data: {
-          Date: moment(Date).format(),
-          amountPaid: amountPaid,
-          isPaid: true,
-          totalAmountCollected: amountPaid,
-          ...rest
-        },
-
-      });
-
-      res.status(200).json({ message: "payment made successfully", createPayment });
-      
-    }else{
-      res.status(200).json({ message: "Not Paid"});
-
-    }
-   
+    const createPayment = await prisma.payment.create({
+      data: {
+        Date: moment(Date).format(),
+        ...rest,
+      },
+    });
+    res
+      .status(200)
+      .json({ message: "payment made successfully", createPayment });
   } catch (error) {
     console.error(error);
   }
@@ -54,7 +44,6 @@ const updatePaymentById = async (req, res) => {
     res.status(200).json({ updatePayment });
   } catch (error) {
     console.error(error);
-
   }
 };
 
@@ -70,59 +59,59 @@ const deletePaymentById = async (req, res) => {
     res.status(200).json({ deletePayment });
   } catch (error) {
     console.error(error);
-   
   }
 };
 
 //Defining function to get all payments made by a particular student
 const getPaymentBystudentId = async (req, res) => {
-  const {studentid} = req.body
+  const { studentid } = req.body;
   try {
     const student = await prisma.student.findUnique({
       where: { indexNumber: studentid },
-
     });
-    if(student){
+    if (student) {
       const payment = await prisma.payment.findMany({
-        where: {studentid}
-      })
-      res.status(200).json({message:"payment for student with student id "+ studentid, payment});
-    }
-    else{
-      res.status(404).json({message:"No payment found with student id "+ studentid});
+        where: { studentid },
+      });
+      res.status(200).json({
+        message: "payment for student with student id " + studentid,
+        payment,
+      });
+    } else {
+      res
+        .status(404)
+        .json({ message: "No payment found with student id " + studentid });
     }
   } catch (error) {
     console.error(error);
-    
   }
 };
 
 //Defining function to get all payment by inputing date for day transaction
 const getPaymentByDate = async (req, res) => {
   try {
-    const {date} = req.body
+    const { date } = req.body;
     const getPaymentByDate = await prisma.payment.findMany({
       where: {
-       date
-      }
+        date,
+      },
     });
-    if(!date){
-      res.status(404).json({message:"No payment date found for ", date});
-    }else{
+    if (!date) {
+      res.status(404).json({ message: "No payment date found for ", date });
+    } else {
       res.status(200).json({ message: "payment for ", getPaymentByDate });
     }
-    
   } catch (error) {
     console.error(error);
-   
   }
 };
 
+//exporting all our function names here
 module.exports = {
   makePayment,
   getAllPayments,
   updatePaymentById,
   deletePaymentById,
   getPaymentBystudentId,
-  getPaymentByDate
+  getPaymentByDate,
 };
